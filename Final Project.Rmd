@@ -64,12 +64,15 @@ summary(model)
 ggplot(d, aes(x = sbcavg, y = donate_3)) +
   geom_smooth(method = "lm") +
   geom_jitter(alpha = .6) +
-  scale_y_continuous(labels = scales::dollar) +
+  scale_y_continuous(labels = scales::dollar) +  
   labs(x = "Self-Brand Connection (SBC)", y = "Donations", title = "SBC to Nike increased donations to Black Lives Matter", subtitle = "A 10-point increase in SBC is associated with a $0.33 boost in donation amount") +
   theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), 
         plot.subtitle = element_text(hjust = 0.5),
         legend.title = element_text(size = 16, face = "bold"),
-        legend.background = element_rect(size = .5))
+        legend.background = element_rect(size = .5)) # I didn't know that you could do all of these modifications within theme(). Good to know! 
+
+# This is a nice, clean visualization. It's easy to understand and it goes right to the point. I like the information you provide about the linear relation between the variables. I suggest you increase the transparency a bit more, like a .5 or .4 so that you can appreciate better were the data point are more clustered. 
+
 ```
 
 # SBC by Activism Awareness Interaction on Donations
@@ -116,11 +119,13 @@ ggplot(d, aes(x = sbcavg, y = donate_3, color = know2)) +
   labs(x = "SBC", y = "Donations", title = "Consumers gave more to Black Lives Matter when they were aware of its Kaepernick campaign", subtitle = "Stronger relationship between SBC and activism for those who were aware of Nike's activism", color = "Awareness") +
   geom_vline(xintercept = c(14.09, 85.70), color = "black", linetype = 2) +
   annotate("label", label = "Region of significance\nat SBC < 14.09", x = 14.09, y = 4.5, color = "black", size = 4) +
-  annotate("label", label = "Region of significance\nat SBC > 85.70", x = 85.70, y = 6.3, color = "black", size = 4) +
+  annotate("label", label = "Region of significance\nat SBC > 85.70", x = 85.70, y = 6.3, color = "black", size = 4) + # Great, this is how you use annotate!
   theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), 
         plot.subtitle = element_text(hjust = 0.5),
         legend.title = element_text(size = 16, face = "bold"),
         legend.background = element_rect(size = .5))
+
+# This is also a nice, clean visualization. Gets to the point quickly. However, I'd suggest you shorten the title. Something like "Greater campaign awareness predicts higher donations". Something short, that grabs the readers attention.
 ```
 
 SBC positively affects donation intentions for those with and without knowledge of Nike's activism. However, knowledge moderates the strength of SBC's effect on donation intentions.
@@ -151,7 +156,7 @@ pol <- d %>%
   summarize(n = n(),
             mean = mean(donate_3),
             sd = sd(donate_3),
-            se = plotrix::std.error(donate_3))
+            se = plotrix::std.error(donate_3)) # New cool package, I'll download it too! 
 ```
 
 ## Identifying the Distribution for Each Political Orientation
@@ -161,7 +166,7 @@ While perhaps not the most illustrative visualization of the data, the follow de
 ```{r distributions}
 sum <- pol %>% 
   group_by(polit) %>% 
-  filter(polit != "Other" & polit != "NA") %>% 
+  filter(polit != "Other" & polit != "NA") %>% # I think you don't need this line of code because polit already had this filter. 
   summarize(mean = mean(mean))
 
 ggplot(d, aes(x = donate_3, fill = polit)) +
@@ -172,7 +177,7 @@ ggplot(d, aes(x = donate_3, fill = polit)) +
   facet_wrap(~polit, ncol = 1) +
   labs(x = "Donations to BLM", y = "Density", fill = "Political Orientation", title = "Differences in distribution of donations to BLM by political orientation", caption = "* = Dashed lines indicate mean donation") +
   theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5), 
-        plot.subtitle = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5), # I don't see a subtitle, you probably don't need this line of code.
         legend.position = "none")
 ```
 
@@ -185,7 +190,7 @@ To make comparisons as easy as possible, we will also drop moderates from the vi
 Uh oh, it's time to make the dreaded **dynamite plot**! I'd like to compare donations to Black Lives Matter by political orientation, SBC, and activism awareness, complete with error bars to visualize uncertainty.
 
 ```{r pol_int}
-pd <- position_dodge(.9)
+pd <- position_dodge(.9) # Another cool thing, I usally just use the position = "dodge". Now I know I can modify how overlapped the columns are.  
 
 pol2 <- pol %>% 
   filter(polit != "Moderate")
@@ -203,8 +208,35 @@ ggplot(pol2, aes(x = sbc_cat, y = mean, fill = know2)) +
         legend.title = element_text(size = 16, face = "bold"),
         legend.background = element_rect(size = .5),
         legend.position = "bottom")
+
+# Even though it is a traditional visualization, I wanted to make this exact same viz in my project because is the one that it's usually expected in academic papers. With you permission, I'd like to borrow your code! 
+
 ```
 
 As can be seen, the influence of SBC and awareness on conservatives appears staggering! Their donations to Black Lives Matter are < $0.50 at low SBC, but skyrocket at high SBC. This is especially true for conservatives who were aware of Nike's Kaepernick campaign, although the 95% interval around the mean is large. 
 
 Interestingly, there was somewhat of a crossover interaction for liberals, such that being aware (vs. unaware) of Nike's activism led to increased donations at high SBC, but decreased donations at low SBC. 
+
+```{r}
+
+# Hi Andrew,
+
+#Your code and visualizations look great! I really appreciate the description you made of your project and the data. It sounds like a very cool project! 
+
+# The following are things that I see as strenghts in your code and visualizations:
+# - Your detailed description of what you are doing in each step and in each plot.
+# - Clean, consistent code, easy to follow. 
+# - Clear visualizations that convey the message quickly. Low cognitive load. 
+
+# These are some things that I learned from your script. Thank you! 
+# - How to modify visualization titles.
+# - How to create "dynamite plots" with error bars.
+
+# These are some suggestions, that may improve your visualizations. 
+# - Shorten the titles of the visualizations a little bit so they grab the readers attention quicker.
+# - You probably already have in mind some color palettes, but anyway I suggest you to change the default colors as they are a little "meh" to me. 
+
+# Overall, great job! I wish I was as detailed and clear in my project as you were here (#Ifeelformypeerreviewers)
+
+```
+
